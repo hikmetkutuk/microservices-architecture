@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  mongodb-product-service:
+    image: mongo:7.0.4
+    container_name: microservices-mongodb-product-service
+    volumes:
+      - data-product-service:/data/db
+    ports:
+      - "27021:27017"
+
+volumes:
+  data-product-service:
