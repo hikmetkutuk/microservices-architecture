@@ -8,5 +8,18 @@ services:
     ports:
       - "27021:27017"
 
+  postgres-order-service:
+    image: "postgres:13.1"
+    container_name: microservices-postgres-order-service
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: order-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - data-order-service:/data/postgres
+
 volumes:
   data-product-service:
+  data-order-service:
