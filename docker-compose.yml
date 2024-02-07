@@ -20,6 +20,19 @@ services:
     volumes:
       - data-order-service:/data/postgres
 
+  postgres-inventory-service:
+    image: "postgres:13.1"
+    container_name: microservices-postgres-inventory-service
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: inventory-service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - data-inventory-service:/data/postgres
+
 volumes:
   data-product-service:
   data-order-service:
+  data-inventory-service:
