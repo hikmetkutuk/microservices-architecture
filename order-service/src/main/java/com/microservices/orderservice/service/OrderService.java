@@ -9,11 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class OrderService {
     private final OrderRepository orderRepository;
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
@@ -34,6 +36,10 @@ public class OrderService {
 
             order.setOrderLineItemsList(orderLineItems);
 
+            /*
+                call inventory service
+                if is in stock place order
+             */
             orderRepository.save(order);
             String message = "Order placed successfully";
             log.info(message);

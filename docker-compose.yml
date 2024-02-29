@@ -9,7 +9,7 @@ services:
       - "27021:27017"
 
   postgres-order-service:
-    image: "postgres:13.1"
+    image: "postgres:15.5"
     container_name: microservices-postgres-order-service
     ports:
       - "5432:5432"
@@ -21,7 +21,7 @@ services:
       - data-order-service:/data/postgres
 
   postgres-inventory-service:
-    image: "postgres:13.1"
+    image: "postgres:15.5"
     container_name: microservices-postgres-inventory-service
     ports:
       - "5433:5432"
