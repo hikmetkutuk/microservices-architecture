@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  customer-db:
+    image: mongo:7.0.4
+    container_name: microservices-customer-mongodb
+    volumes:
+      - data-customer-service:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=customer
+    ports:
+      - "27021:27017"
+    networks:
+      - microservices-net
+
+volumes:
+  data-customer-service:
+
+networks:
+  microservices-net:
+    driver: bridge
