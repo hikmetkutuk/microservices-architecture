@@ -1,6 +1,7 @@
 package com.microservices_architecture.customer.mapper;
 
 import com.microservices_architecture.customer.dto.CustomerRequest;
+import com.microservices_architecture.customer.dto.CustomerResponse;
 import com.microservices_architecture.customer.model.Customer;
 import org.springframework.stereotype.Service;
 
@@ -16,5 +17,15 @@ public class CustomerMapper {
                 .email(customerRequest.email())
                 .address(customerRequest.address())
                 .build();
+    }
+
+    public CustomerResponse fromCustomer(Customer customer) {
+        return new CustomerResponse(
+                customer.getId(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getAddress()
+        );
     }
 }

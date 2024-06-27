@@ -10,6 +10,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class CustomerService {
@@ -42,6 +45,19 @@ public class CustomerService {
         } catch (Exception e) {
             log.error("Unexpected error occurred while creating customer: " + e.getMessage());
             throw new CustomerCreationException("Unexpected error occurred while creating customer: " + e.getMessage());
+        }
+    }
+
+    public List<CustomerResponse> getAllCustomers() {
+        try {
+            log.info("Getting all customers");
+            return customerRepository.findAll()
+                    .stream()
+                    .map(mapper::fromCustomer)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while getting all customers: " + e.getMessage());
+            throw new RuntimeException("Unexpected error occurred while getting all customers: " + e.getMessage());
         }
     }
 }
