@@ -3,6 +3,8 @@ package com.microservices_architecture.customer.service;
 import com.microservices_architecture.customer.dto.CustomerRequest;
 import com.microservices_architecture.customer.dto.CustomerResponse;
 import com.microservices_architecture.customer.exception.CustomerCreationException;
+import com.microservices_architecture.customer.exception.CustomerNotFoundException;
+import com.microservices_architecture.customer.exception.CustomerRetrievalException;
 import com.microservices_architecture.customer.mapper.CustomerMapper;
 import com.microservices_architecture.customer.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +59,19 @@ public class CustomerService {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             log.error("Unexpected error occurred while getting all customers: " + e.getMessage());
-            throw new RuntimeException("Unexpected error occurred while getting all customers: " + e.getMessage());
+            throw new CustomerRetrievalException("Unexpected error occurred while getting all customers: " + e.getMessage());
+        }
+    }
+
+    public CustomerResponse getCustomerById(String id) {
+        try {
+            log.info("Getting customer with id: {}", id);
+            return customerRepository.findById(id)
+                    .map(mapper::fromCustomer)
+                    .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while getting customer: " + e.getMessage());
+            throw new CustomerRetrievalException("Unexpected error occurred while getting customer: " + e.getMessage());
         }
     }
 }

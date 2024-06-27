@@ -38,4 +38,15 @@ public class CustomerController {
     public ResponseEntity<List<CustomerResponse>> getAllCustomers() {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
+
+    /**
+     * A description of the entire Java function.
+     *
+     * @param id description of parameter
+     * @return description of return value
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable String id) {
+        return ResponseEntity.ok(customerService.getCustomerById(id));
+    }
 }

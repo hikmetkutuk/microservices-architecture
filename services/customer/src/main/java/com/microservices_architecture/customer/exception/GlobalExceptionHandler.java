@@ -17,4 +17,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleGenericException() {
         return new ResponseEntity<>("An unexpected error occurred. Please try again later.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(CustomerRetrievalException.class)
+    public ResponseEntity<String> handleCustomerRetrievalException(CustomerRetrievalException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
