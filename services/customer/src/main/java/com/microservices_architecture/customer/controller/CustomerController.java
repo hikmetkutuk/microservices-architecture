@@ -61,4 +61,15 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable String id, @RequestBody @Valid CustomerRequest customerRequest) {
         return ResponseEntity.ok(customerService.updateCustomer(id, customerRequest));
     }
+
+    /**
+     * Deletes a customer by ID.
+     *
+     * @param id the ID of the customer to delete
+     * @return the response entity with the result of the delete operation
+     */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable String id) {
+        return ResponseEntity.ok(customerService.deleteCustomer(id));
+    }
 }

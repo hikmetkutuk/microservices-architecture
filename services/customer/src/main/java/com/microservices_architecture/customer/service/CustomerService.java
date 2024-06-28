@@ -3,6 +3,7 @@ package com.microservices_architecture.customer.service;
 import com.microservices_architecture.customer.dto.CustomerRequest;
 import com.microservices_architecture.customer.dto.CustomerResponse;
 import com.microservices_architecture.customer.exception.CustomerCreationException;
+import com.microservices_architecture.customer.exception.CustomerDeletionException;
 import com.microservices_architecture.customer.exception.CustomerNotFoundException;
 import com.microservices_architecture.customer.exception.CustomerRetrievalException;
 import com.microservices_architecture.customer.mapper.CustomerMapper;
@@ -11,6 +12,7 @@ import com.microservices_architecture.customer.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -104,6 +106,20 @@ public class CustomerService {
         }
         if (customerRequest.address() != null) {
             customer.setAddress(customerRequest.address());
+        }
+    }
+
+    public String deleteCustomer(String id) {
+        try {
+            customerRepository.deleteById(id);
+            log.info("Customer deleted successfully with id: {}", id);
+            return "Customer deleted successfully";
+        } catch (EmptyResultDataAccessException e) {
+            log.error("Customer with id {} not found: {}", id, e.getMessage());
+            throw new CustomerNotFoundException("Customer with id " + id + " not found", e);
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while deleting customer with id {}: {}", id, e.getMessage(), e);
+            throw new CustomerDeletionException("Unexpected error occurred while deleting customer with id " + id, e);
         }
     }
 }

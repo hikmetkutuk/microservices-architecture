@@ -27,4 +27,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleCustomerNotFoundException(CustomerNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CustomerDeletionException.class)
+    public ResponseEntity<String> handleCustomerDeletionException(CustomerDeletionException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
