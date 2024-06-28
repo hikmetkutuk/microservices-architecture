@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    username: root
+    url: jdbc:postgresql://localhost:5432/product
+    password: product
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: 'true'
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: POSTGRESQL
+    flyway:
+      enabled: true
+      baseline-on-migrate: true
+      baseline-description: "initial"
+      baseline-version: 0
+      user: ${spring.datasource.username}
+      password: ${spring.datasource.password}
+
+server:
+  port: 8092

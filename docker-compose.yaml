@@ -13,8 +13,40 @@ services:
     networks:
       - microservices-net
 
+  product-db:
+    container_name: microservices-product-postgres
+    image: postgres:15.5
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: product
+      PGDATA: /data/postgres
+    volumes:
+      - data-product-service:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: microservices-pgadmin
+    image: dpage/pgadmin4:8.9
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - data-pgadmin-service:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
 volumes:
   data-customer-service:
+  data-product-service:
+  data-pgadmin-service:
 
 networks:
   microservices-net:
