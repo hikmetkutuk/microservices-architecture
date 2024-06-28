@@ -6,6 +6,7 @@ import com.microservices_architecture.customer.exception.CustomerCreationExcepti
 import com.microservices_architecture.customer.exception.CustomerNotFoundException;
 import com.microservices_architecture.customer.exception.CustomerRetrievalException;
 import com.microservices_architecture.customer.mapper.CustomerMapper;
+import com.microservices_architecture.customer.model.Customer;
 import com.microservices_architecture.customer.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -72,6 +73,37 @@ public class CustomerService {
         } catch (Exception e) {
             log.error("Unexpected error occurred while getting customer: " + e.getMessage());
             throw new CustomerRetrievalException("Unexpected error occurred while getting customer: " + e.getMessage());
+        }
+    }
+
+    public CustomerResponse updateCustomer(String id, CustomerRequest customerRequest) {
+        try {
+            var customer = customerRepository.findById(id)
+                    .orElseThrow(() -> new CustomerNotFoundException("Customer not found with id: " + id));
+            mergeCustomer(customer, customerRequest);
+            log.info("Updating customer with id: {}", id);
+            return mapper.fromCustomer(customerRepository.save(customer));
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while updating customer: {}", e.getMessage(), e);
+            throw new CustomerRetrievalException("Unexpected error occurred while updating customer: " + e.getMessage());
+        }
+    }
+
+    private void mergeCustomer(Customer customer, CustomerRequest customerRequest) {
+        if (customerRequest == null) {
+            throw new IllegalArgumentException("Customer request cannot be null");
+        }
+        if (customerRequest.firstName() != null) {
+            customer.setFirstName(customerRequest.firstName());
+        }
+        if (customerRequest.lastName() != null) {
+            customer.setLastName(customerRequest.lastName());
+        }
+        if (customerRequest.email() != null) {
+            customer.setEmail(customerRequest.email());
+        }
+        if (customerRequest.address() != null) {
+            customer.setAddress(customerRequest.address());
         }
     }
 }

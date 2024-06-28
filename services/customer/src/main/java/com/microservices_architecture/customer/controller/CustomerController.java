@@ -49,4 +49,16 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> getCustomerById(@PathVariable String id) {
         return ResponseEntity.ok(customerService.getCustomerById(id));
     }
+
+    /**
+     * Update a customer based on the provided ID and request.
+     *
+     * @param id              the ID of the customer to update
+     * @param customerRequest the updated customer details
+     * @return response entity with updated customer details
+     */
+    @PutMapping("/update/{id}")
+    public ResponseEntity<CustomerResponse> updateCustomer(@PathVariable String id, @RequestBody @Valid CustomerRequest customerRequest) {
+        return ResponseEntity.ok(customerService.updateCustomer(id, customerRequest));
+    }
 }
