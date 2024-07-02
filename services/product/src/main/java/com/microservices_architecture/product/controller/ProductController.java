@@ -5,10 +5,9 @@ import com.microservices_architecture.product.dto.ProductResponse;
 import com.microservices_architecture.product.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -22,11 +21,21 @@ public class ProductController {
     /**
      * Create a new product based on the provided product request.
      *
-     * @param  productRequest   the product request containing details of the product
-     * @return                  the response entity with the product response
+     * @param productRequest the product request containing details of the product
+     * @return the response entity with the product response
      */
     @PostMapping("/create")
     public ResponseEntity<ProductResponse> createProduct(@RequestBody @Valid ProductRequest productRequest) {
         return ResponseEntity.ok(productService.createProduct(productRequest));
+    }
+
+    /**
+     * Retrieves all products.
+     *
+     * @return List of ProductResponse objects
+     */
+    @GetMapping("/list")
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 }

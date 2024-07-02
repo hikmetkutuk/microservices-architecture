@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class ProductService {
@@ -37,6 +40,19 @@ public class ProductService {
         } catch (Exception e) {
             log.error("Unexpected error occurred while creating product: " + e.getMessage());
             throw new ProductCreationException("Unexpected error occurred while creating product: " + e.getMessage());
+        }
+    }
+
+    public List<ProductResponse> getAllProducts() {
+        try {
+            log.info("Getting all products");
+            return productRepository.findAll()
+                    .stream()
+                    .map(mapper::fromProduct)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while getting all products: " + e.getMessage());
+            throw new RuntimeException("Unexpected error occurred while getting all products: " + e.getMessage());
         }
     }
 }
