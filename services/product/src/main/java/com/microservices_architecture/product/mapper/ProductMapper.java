@@ -2,6 +2,7 @@ package com.microservices_architecture.product.mapper;
 
 import com.microservices_architecture.product.dto.ProductRequest;
 import com.microservices_architecture.product.dto.ProductResponse;
+import com.microservices_architecture.product.model.Category;
 import com.microservices_architecture.product.model.Product;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,11 @@ public class ProductMapper {
                 .description(productRequest.description())
                 .quantity(productRequest.quantity())
                 .price(productRequest.price())
+                .category(
+                        Category.builder()
+                                .id(productRequest.categoryId())
+                                .build()
+                )
                 .build();
     }
 
@@ -25,7 +31,10 @@ public class ProductMapper {
                 product.getName(),
                 product.getDescription(),
                 product.getQuantity(),
-                product.getPrice()
+                product.getPrice(),
+                product.getCategory().getId(),
+                product.getCategory().getName(),
+                product.getCategory().getDescription()
         );
     }
 }

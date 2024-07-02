@@ -32,7 +32,10 @@ public class ProductService {
                     product.getName(),
                     product.getDescription(),
                     product.getQuantity(),
-                    product.getPrice()
+                    product.getPrice(),
+                    product.getCategory().getId(),
+                    product.getCategory().getName(),
+                    product.getCategory().getDescription()
             );
         } catch (DataIntegrityViolationException e) {
             log.error("Data integrity violation occurred while creating product: " + e.getMessage());
