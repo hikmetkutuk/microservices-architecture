@@ -55,4 +55,16 @@ public class ProductService {
             throw new RuntimeException("Unexpected error occurred while getting all products: " + e.getMessage());
         }
     }
+
+    public ProductResponse getProductById(int id) {
+        try {
+            log.info("Getting product with ID: {}", id);
+            return productRepository.findById(id)
+                    .map(mapper::fromProduct)
+                    .orElseThrow(() -> new RuntimeException("Product not found with ID: " + id));
+        } catch (Exception e) {
+            log.error("Unexpected error occurred while getting product: " + e.getMessage());
+            throw new RuntimeException("Unexpected error occurred while getting product: " + e.getMessage());
+        }
+    }
 }

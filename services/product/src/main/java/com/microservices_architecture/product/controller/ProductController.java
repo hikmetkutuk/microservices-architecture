@@ -38,4 +38,15 @@ public class ProductController {
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
+
+    /**
+     * A description of the entire Java function.
+     *
+     * @param id description of parameter
+     * @return description of return value
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable int id) {
+        return ResponseEntity.ok(productService.getProductById(id));
+    }
 }
