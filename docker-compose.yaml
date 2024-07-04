@@ -28,6 +28,21 @@ services:
       - microservices-net
     restart: unless-stopped
 
+  order-db:
+    container_name: microservices-order-postgres
+    image: postgres:15.5
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: order
+      PGDATA: /data/postgres
+    volumes:
+      - data-order-service:/data/postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - microservices-net
+    restart: unless-stopped
+
   pgadmin:
     container_name: microservices-pgadmin
     image: dpage/pgadmin4:8.9
@@ -46,6 +61,7 @@ services:
 volumes:
   data-customer-service:
   data-product-service:
+  data-order-service:
   data-pgadmin-service:
 
 networks:
