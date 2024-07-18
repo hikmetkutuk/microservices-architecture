@@ -1,5 +1,7 @@
 package com.microservices_architecture.product.controller;
 
+import com.microservices_architecture.product.dto.ProductPurchaseRequest;
+import com.microservices_architecture.product.dto.ProductPurchaseResponse;
 import com.microservices_architecture.product.dto.ProductRequest;
 import com.microservices_architecture.product.dto.ProductResponse;
 import com.microservices_architecture.product.service.ProductService;
@@ -48,5 +50,18 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProductById(@PathVariable int id) {
         return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    /**
+     * Purchase products based on the provided list of purchase requests.
+     *
+     * @param request list of ProductPurchaseRequest objects
+     * @return ResponseEntity with a list of ProductPurchaseResponse objects
+     */
+    @PostMapping("/purchase")
+    public ResponseEntity<List<ProductPurchaseResponse>> purchaseProducts(
+            @RequestBody List<ProductPurchaseRequest> request
+    ) {
+        return ResponseEntity.ok(productService.purchaseProducts(request));
     }
 }

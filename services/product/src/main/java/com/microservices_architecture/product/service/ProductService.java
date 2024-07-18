@@ -1,14 +1,20 @@
 package com.microservices_architecture.product.service;
 
+import com.microservices_architecture.product.dto.ProductPurchaseRequest;
+import com.microservices_architecture.product.dto.ProductPurchaseResponse;
 import com.microservices_architecture.product.dto.ProductRequest;
 import com.microservices_architecture.product.dto.ProductResponse;
 import com.microservices_architecture.product.exception.ProductCreationException;
+import com.microservices_architecture.product.exception.ProductPurchaseException;
 import com.microservices_architecture.product.mapper.ProductMapper;
 import com.microservices_architecture.product.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,5 +75,36 @@ public class ProductService {
             log.error("Unexpected error occurred while getting product: " + e.getMessage());
             throw new RuntimeException("Unexpected error occurred while getting product: " + e.getMessage());
         }
+    }
+
+    @Transactional(rollbackFor = ProductPurchaseException.class)
+    public List<ProductPurchaseResponse> purchaseProducts(
+            List<ProductPurchaseRequest> request
+    ) {
+        var productIds = request
+                .stream()
+                .map(ProductPurchaseRequest::productId)
+                .toList();
+        var storedProducts = productRepository.findAllByIdInOrderById(productIds);
+        if (productIds.size() != storedProducts.size()) {
+            throw new ProductPurchaseException("One or more products does not exist");
+        }
+        var sortedRequest = request
+                .stream()
+                .sorted(Comparator.comparing(ProductPurchaseRequest::productId))
+                .toList();
+        var purchasedProducts = new ArrayList<ProductPurchaseResponse>();
+        for (int i = 0; i < storedProducts.size(); i++) {
+            var product = storedProducts.get(i);
+            var productRequest = sortedRequest.get(i);
+            if (product.getQuantity() < productRequest.quantity()) {
+                throw new ProductPurchaseException("Insufficient stock quantity for product with ID:: " + productRequest.productId());
+            }
+            var newAvailableQuantity = product.getQuantity() - productRequest.quantity();
+            product.setQuantity(newAvailableQuantity);
+            productRepository.save(product);
+            purchasedProducts.add(mapper.toproductPurchaseResponse(product, productRequest.quantity()));
+        }
+        return purchasedProducts;
     }
 }

@@ -1,5 +1,6 @@
 package com.microservices_architecture.product.mapper;
 
+import com.microservices_architecture.product.dto.ProductPurchaseResponse;
 import com.microservices_architecture.product.dto.ProductRequest;
 import com.microservices_architecture.product.dto.ProductResponse;
 import com.microservices_architecture.product.model.Category;
@@ -35,6 +36,16 @@ public class ProductMapper {
                 product.getCategory().getId(),
                 product.getCategory().getName(),
                 product.getCategory().getDescription()
+        );
+    }
+
+    public ProductPurchaseResponse toproductPurchaseResponse(Product product, double quantity) {
+        return new ProductPurchaseResponse(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                quantity
         );
     }
 }
